@@ -33,18 +33,18 @@ const Signup = () => {
           onChange={(e) => setName(e.target.value)}
         />
       </FormControl>
-      <FormControl id="email" isRequired>
-        <FormLabel>Email</FormLabel>
+      <FormControl id="new-email" isRequired>
+        <FormLabel>Email Address</FormLabel>
         <Input
           placeholder="Enter Your Email"
           onChange={(e) => setEmail(e.target.value)}
         />
       </FormControl>
-      <FormControl id="password" isRequired>
+      <FormControl id="new-password" isRequired>
         <FormLabel>Password</FormLabel>
         <InputGroup>
           <Input
-            type={show ? "text" : "password"}
+            type={show ? "text" : "new-password"}
             placeholder="Enter New Password"
             onChange={(e) => setPassword(e.target.value)}
           />
@@ -55,11 +55,11 @@ const Signup = () => {
           </InputRightElement>
         </InputGroup>
       </FormControl>
-      <FormControl id="password" isRequired>
+      <FormControl id="confirm-password" isRequired>
         <FormLabel>Confirm Password</FormLabel>
         <InputGroup>
           <Input
-            type={show ? "text" : "password"}
+            type={show ? "text" : "confirm-password"}
             placeholder="Confirm New Password"
             onChange={(e) => setConfirmPassword(e.target.value)}
           />

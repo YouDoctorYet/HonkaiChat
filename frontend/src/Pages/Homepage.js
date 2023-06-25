@@ -37,7 +37,7 @@ const Homepage = () => {
         bg="white"
         w="100%"
         p={4}
-        borderRaduis="lg"
+        borderRadius="lg"
         borderWidth="1px"
         color="black"
       >

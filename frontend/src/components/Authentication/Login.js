@@ -24,7 +24,7 @@ const Login = () => {
   return (
     <VStack spacing="5px" color="black">
       <FormControl id="email" isRequired>
-        <FormLabel>Email</FormLabel>
+        <FormLabel>Email Address</FormLabel>
         <Input
           placeholder="Enter Your Email"
           onChange={(e) => setEmail(e.target.value)}
