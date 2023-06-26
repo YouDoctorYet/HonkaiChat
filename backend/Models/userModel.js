@@ -9,7 +9,7 @@ const userSchema = mongoose.Schema(
     pic: {
       type: String,
       default:
-        "https://static.wikia.nocookie.net/houkai-star-rail/images/c/cf/Profile_Picture_None.png/revision/latest?cb=20230506140240",
+        "https://static.wikia.nocookie.net/houkai-star-rail/images/c/cf/Profile_Picture_None.png",
     },
   },
   { timestamps: true }
