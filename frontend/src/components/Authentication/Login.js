@@ -1,4 +1,4 @@
-import { React, useState } from "react";
+import React, { useState } from "react";
 import {
   FormControl,
   FormLabel,
@@ -14,12 +14,11 @@ import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const [show, setShow] = useState(false);
-  const [email, setEmail] = useState();
-  const [password, setPassword] = useState();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [picLoading, setPicLoading] = useState(false);
 
   const handleClick = () => setShow(!show);
-  const postDetails = (pic) => {};
 
   const toast = useToast();
   const navigate = useNavigate();
@@ -81,6 +80,7 @@ const Login = () => {
       <FormControl id="email" isRequired>
         <FormLabel>Email Address</FormLabel>
         <Input
+          type="email"
           placeholder="Enter Your Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}

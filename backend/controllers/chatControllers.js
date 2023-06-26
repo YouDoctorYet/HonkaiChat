@@ -98,4 +98,95 @@ const createGroupChat = asyncHandler(async (req, res) => {
   }
 });
 
-module.exports = { accessChat, fetchChats, createGroupChat };
+const renameGroup = asyncHandler(async (req, res) => {
+  const { chatId, chatName } = req.body;
+
+  const updatedGroup = await Chat.findByIdAndUpdate(
+    chatId,
+    {
+      chatName,
+    },
+    { new: true }
+  )
+    .populate("users", "-password")
+    .populate("groupAdmin", "-password");
+
+  if (!updatedGroup) {
+    res.status(404);
+    throw new Error("Chat Not Found");
+  } else {
+    res.json(updatedGroup);
+  }
+});
+
+const addToGroup = asyncHandler(async (req, res) => {
+  const { chatId, userId } = req.body;
+
+  const chat = await Chat.findById(chatId);
+
+  // If user is already in group
+  if (chat.users.includes(userId)) {
+    res.status(400);
+    throw new Error("User already in group");
+  }
+
+  const updatedGroup = await Chat.findByIdAndUpdate(
+    chatId,
+    {
+      $push: { users: userId },
+    },
+    { new: true }
+  )
+    .populate("users", "-password")
+    .populate("groupAdmin", "-password");
+
+  if (!updatedGroup) {
+    res.status(404);
+    throw new Error("Failed to add user");
+  } else {
+    res.json(updatedGroup);
+  }
+});
+
+const removeFromGroup = asyncHandler(async (req, res) => {
+  const { chatId, userId } = req.body;
+
+  const chat = await Chat.findById(chatId);
+
+  // If user is not in group
+  if (!chat.users.includes(userId)) {
+    res.status(400);
+    throw new Error("User not in group");
+  }
+
+  if (userId === req.user._id) {
+    res.status(400);
+    throw new Error("Cannot remove group admin");
+  }
+
+  const updatedGroup = await Chat.findByIdAndUpdate(
+    chatId,
+    {
+      $pull: { users: userId },
+    },
+    { new: true }
+  )
+    .populate("users", "-password")
+    .populate("groupAdmin", "-password");
+
+  if (!updatedGroup) {
+    res.status(404);
+    throw new Error("Failed to remove user");
+  } else {
+    res.json(updatedGroup);
+  }
+});
+
+module.exports = {
+  accessChat,
+  fetchChats,
+  createGroupChat,
+  renameGroup,
+  addToGroup,
+  removeFromGroup,
+};
