@@ -1,23 +1,14 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
-import { ChatState } from "../context/ChatProvider";
-import {
-  Container,
-  Box,
-  Text,
-  Tabs,
-  TabList,
-  TabPanels,
-  Tab,
-  TabPanel,
-} from "@chakra-ui/react";
-
-import SideDrawer from "../components/miscellaneous/SideDrawer";
+import { Box } from "@chakra-ui/layout";
+import { useState } from "react";
+import Chatbox from "../components/ChatBox";
 import MyChats from "../components/MyChats";
-import ChatBox from "../components/ChatBox";
+import SideDrawer from "../components/miscellaneous/SideDrawer";
+import { ChatState } from "../context/ChatProvider";
 
-const ChatPage = () => {
+const Chatpage = () => {
+  const [fetchAgain, setFetchAgain] = useState(false);
   const { user } = ChatState();
+
   return (
     <div style={{ width: "100%" }}>
       {user && <SideDrawer />}
@@ -28,11 +19,13 @@ const ChatPage = () => {
         h="91.5vh"
         p="10px"
       >
-        {user && <MyChats />}
-        {user && <ChatBox />}
+        {user && <MyChats fetchAgain={fetchAgain} />}
+        {user && (
+          <Chatbox fetchAgain={fetchAgain} setFetchAgain={setFetchAgain} />
+        )}
       </Box>
     </div>
   );
 };
 
-export default ChatPage;
+export default Chatpage;
