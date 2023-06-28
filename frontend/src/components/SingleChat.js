@@ -32,6 +32,28 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   const [isTyping, setIsTyping] = useState(false);
   const toast = useToast();
 
+  const fetchNotifications = async () => {
+    try {
+      const config = {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      };
+      const { data } = await axios.get(`/api/notification/${user._id}`, config);
+      setNotification(data);
+    } catch (error) {
+      console.error(error);
+      toast({
+        title: "Error Occured!",
+        description: "Failed to fetch notifications",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
+      });
+    }
+  };
+
   const fetchMessages = async () => {
     if (!selectedChat) return;
     try {
@@ -68,13 +90,13 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     });
 
     socket.on("typing", (typingChatId) => {
-      if (selectedChat._id === typingChatId) {
+      if (selectedChat && selectedChat._id === typingChatId) {
         setIsTyping(true);
       }
     });
 
     socket.on("stop typing", (typingChatId) => {
-      if (selectedChat._id === typingChatId) {
+      if (selectedChat && selectedChat._id === typingChatId) {
         setIsTyping(false);
       }
     });
@@ -91,10 +113,15 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   }, [selectedChat]);
 
   useEffect(() => {
+    fetchNotifications();
+  }, []);
+
+  useEffect(() => {
     socket.on("message received", (newMessageReceived) => {
       if (
         !selectedChatCompare ||
-        selectedChatCompare._id !== newMessageReceived.chat._id
+        selectedChatCompare._id !== newMessageReceived.chat._id ||
+        newMessageReceived.sender._id === user._id // Checking if the current user is the sender
       ) {
         if (!notification.includes(newMessageReceived)) {
           setNotification([newMessageReceived, ...notification]);
@@ -128,7 +155,18 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
         );
         socket.emit("new message", data);
         setMessages([...messages, data]);
+        await axios.post(
+          "/api/notification",
+          {
+            sender: user._id,
+            chat: selectedChat._id,
+            // Get the recipient from the selectedChat
+            recipient: selectedChat.users.find((u) => u._id !== user._id)._id,
+          },
+          config
+        );
       } catch (error) {
+        console.error(error);
         toast({
           title: "Error Occured!",
           description: "Failed to send the Message",

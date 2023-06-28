@@ -5,6 +5,8 @@ const connectDB = require("./config/db");
 const userRoutes = require("./routes/userRoutes");
 const chatRoutes = require("./routes/chatRoutes");
 const messageRoutes = require("./routes/messageRoutes");
+const notificationRoutes = require("./routes/notificationRoutes");
+const Notification = require("./models/notificationModel");
 
 const { notFound, errorHandler } = require("./middleware/errorMiddleware");
 
@@ -21,6 +23,7 @@ app.get("/", (req, res) => {
 app.use("/api/user", userRoutes);
 app.use("/api/chat", chatRoutes);
 app.use("/api/message", messageRoutes);
+app.use("/api/notification", notificationRoutes);
 
 app.use(notFound);
 app.use(errorHandler);
@@ -41,6 +44,11 @@ io.on("connection", (socket) => {
   socket.on("setup", (userData) => {
     socket.join(userData._id);
     socket.emit("connected");
+
+    socket.on("disconnect", () => {
+      console.log("USER DISCONNECTED");
+      socket.leave(userData._id);
+    });
   });
 
   socket.on("join chat", (room) => {
@@ -56,17 +64,21 @@ io.on("connection", (socket) => {
     socket.broadcast.emit("stop typing", chatId);
   });
 
-  socket.on("new message", (newMessageReceived) => {
+  socket.on("new message", async (newMessageReceived) => {
     var chat = newMessageReceived.chat;
     if (!chat.users) return console.log("chat.users not defined");
-    chat.users.forEach((user) => {
+    chat.users.forEach(async (user) => {
       if (user._id === newMessageReceived.sender._id) return;
+
+      // Create and save a new notification
+      const newNotification = new Notification({
+        sender: newMessageReceived.sender._id,
+        recipient: user._id,
+        chat: chat._id,
+      });
+      await newNotification.save();
+      // Emit the 'message received' event to the recipient
       socket.in(user._id).emit("message received", newMessageReceived);
     });
-  });
-
-  socket.off("setup", () => {
-    console.log("USER DISCONNECTED");
-    socket.leave(userData._id);
   });
 });
