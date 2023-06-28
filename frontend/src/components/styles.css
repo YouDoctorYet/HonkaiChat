@@ -4,3 +4,21 @@
   overflow-y: scroll;
   scrollbar-width: none;
 }
+
+@keyframes dotPulse {
+  0% {
+    transform: scale(0.8);
+    background-color: #aaa;
+    opacity: 0.5;
+  }
+  50% {
+    transform: scale(1.2);
+    background-color: #333;
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0.8);
+    background-color: #aaa;
+    opacity: 0.5;
+  }
+}
