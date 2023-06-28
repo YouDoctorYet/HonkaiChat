@@ -55,6 +55,25 @@ const SideDrawer = () => {
     navigate("/");
   };
 
+  const uniqueNotifications = notification.filter(
+    (notif, index, self) => index === self.findIndex((n) => n._id === notif._id)
+  );
+
+  const removeNotificationsBySender = async (senderId) => {
+    const config = {
+      headers: {
+        "Content-type": "application/json",
+        Authorization: `Bearer ${user.token}`,
+      },
+    };
+
+    try {
+      await axios.delete(`/api/notification/${senderId}`, config);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const accessChat = async (userId) => {
     try {
       setLoadingChat(true);
@@ -155,12 +174,17 @@ const SideDrawer = () => {
             </MenuButton>
             <MenuList p={2}>
               {!notification.length && "No New Messages"}
-              {notification.map((notif) => (
+              {console.log(notification)}
+              {uniqueNotifications.map((notif) => (
                 <MenuItem
                   key={notif._id}
-                  onClick={() => {
+                  onClick={async () => {
                     setSelectedChat(notif.chat);
-                    setNotification(notification.filter((n) => n !== notif));
+                    removeNotificationsBySender(notif.sender._id);
+                    const updatedNotifications = notification.filter(
+                      (n) => n.sender._id !== notif.sender._id
+                    );
+                    setNotification(updatedNotifications);
                   }}
                 >
                   {notif.chat.isGroupChat

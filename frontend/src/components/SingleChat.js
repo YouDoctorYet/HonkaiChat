@@ -121,16 +121,24 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
       if (
         !selectedChatCompare ||
         selectedChatCompare._id !== newMessageReceived.chat._id ||
-        newMessageReceived.sender._id === user._id // Checking if the current user is the sender
+        newMessageReceived.sender._id === user._id
       ) {
         if (!notification.includes(newMessageReceived)) {
-          setNotification([newMessageReceived, ...notification]);
+          setNotification((prevNotification) => {
+            if (!prevNotification.includes(newMessageReceived)) {
+              return [newMessageReceived, ...prevNotification];
+            }
+            return prevNotification;
+          });
           setFetchAgain(!fetchAgain);
         }
       } else {
         setMessages([...messages, newMessageReceived]);
       }
     });
+    return () => {
+      socket.off("message received");
+    };
   });
 
   const sendMessage = async (event) => {
