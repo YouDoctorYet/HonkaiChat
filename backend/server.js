@@ -44,6 +44,7 @@ io.on("connection", (socket) => {
   socket.on("setup", (userData) => {
     socket.join(userData._id);
     socket.emit("connected");
+    socket.currentChat = null;
 
     socket.on("disconnect", () => {
       console.log("USER DISCONNECTED");
@@ -52,8 +53,11 @@ io.on("connection", (socket) => {
   });
 
   socket.on("join chat", (room) => {
+    if (socket.currentChat) {
+      socket.broadcast.emit("stop typing", socket.currentChat); // Emit stop typing for the previous room
+    }
     socket.join(room);
-    console.log("user joined room: " + room);
+    socket.currentChat = room;
   });
 
   socket.on("typing", (chatId) => {

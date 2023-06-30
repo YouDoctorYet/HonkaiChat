@@ -88,22 +88,34 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     socket.on("connected", () => {
       setSocketConnected(true);
     });
+    return () => {
+      socket.disconnect();
+    };
+  }, []);
 
-    socket.on("typing", (typingChatId) => {
+  useEffect(() => {
+    if (!socket) return;
+
+    const typingHandler = (typingChatId) => {
       if (selectedChat && selectedChat._id === typingChatId) {
         setIsTyping(true);
       }
-    });
+    };
 
-    socket.on("stop typing", (typingChatId) => {
+    const stopTypingHandler = (typingChatId) => {
       if (selectedChat && selectedChat._id === typingChatId) {
         setIsTyping(false);
       }
-    });
+    };
 
+    socket.on("typing", typingHandler);
+    socket.on("stop typing", stopTypingHandler);
+
+    // Clear the typing state when the chat is switched
     return () => {
-      socket.off("typing");
-      socket.off("stop typing");
+      setIsTyping(false);
+      socket.off("typing", typingHandler);
+      socket.off("stop typing", stopTypingHandler);
     };
   }, [selectedChat]);
 
