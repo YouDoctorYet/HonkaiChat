@@ -177,7 +177,7 @@ const Signup = () => {
           </InputRightElement>
         </InputGroup>
       </FormControl>
-      <FormControl id="pic">
+      {/* <FormControl id="pic">
         <FormLabel>Upload Your Picture</FormLabel>
         <Input
           type="file"
@@ -186,7 +186,7 @@ const Signup = () => {
           placeholder="Enter Your Email"
           onChange={(e) => postDetails(e.target.files[0])}
         />
-      </FormControl>
+      </FormControl> */}
       <Button
         colorScheme="blue"
         width="100%"

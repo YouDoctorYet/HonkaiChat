@@ -31,24 +31,35 @@ import { useNavigate } from "react-router-dom";
 import ChatLoading from "../ChatLoading";
 import UserListItem from "../UserAvatar/UserListItem";
 import axios from "axios";
+import AvatarsModal from "./AvatarsModal";
 
 const SideDrawer = () => {
   const [search, setSearch] = useState("");
   const [searchResult, setSearchResult] = useState([]);
   const [loading, setLoading] = useState(false);
   const [loadingChat, setLoadingChat] = useState(false);
+  const [isAvatarsModalOpen, setAvatarsModalOpen] = useState(false);
 
   const navigate = useNavigate();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
   const {
     user,
+    setUser,
     setSelectedChat,
     chats,
     setChats,
     notification,
     setNotification,
   } = ChatState();
+
+  const openAvatarsModal = () => {
+    setAvatarsModalOpen(true);
+  };
+
+  const closeAvatarsModal = () => {
+    setAvatarsModalOpen(false);
+  };
 
   const logoutHandler = () => {
     localStorage.removeItem("userInfo");
@@ -207,6 +218,9 @@ const SideDrawer = () => {
               <ProfileModal user={user}>
                 <MenuItem>My Profile</MenuItem>
               </ProfileModal>
+              <MenuItem onClick={openAvatarsModal}>
+                Change Profile Picture
+              </MenuItem>
               <MenuDivider />
               <MenuItem onClick={logoutHandler}>Logout</MenuItem>
             </MenuList>
@@ -242,6 +256,12 @@ const SideDrawer = () => {
           </DrawerBody>
         </DrawerContent>
       </Drawer>
+      <AvatarsModal
+        user={user}
+        setUser={setUser}
+        isOpen={isAvatarsModalOpen}
+        onClose={closeAvatarsModal}
+      />
     </>
   );
 };

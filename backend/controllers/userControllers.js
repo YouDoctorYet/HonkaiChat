@@ -67,13 +67,10 @@ const updateUserProfile = asyncHandler(async (req, res) => {
   const user = await User.findById(req.user._id);
 
   if (user) {
-    user.pic = req.body.pic || user.pic;
+    user.pic = `/api/avatar/${req.body.pic}`;
 
     const updatedUser = await user.save();
-
-    res.json({
-      pic: updatedUser.pic,
-    });
+    res.json(updatedUser);
   } else {
     res.status(404);
     throw new Error("User not found");

@@ -11,13 +11,22 @@ const ChatProvider = ({ children }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+    const updateUserInfo = () => {
+      const userInfo = JSON.parse(localStorage.getItem("userInfo"));
 
-    setUser(userInfo);
+      setUser(userInfo);
 
-    if (!userInfo) {
-      navigate("/");
-    }
+      if (!userInfo) {
+        navigate("/");
+      }
+    };
+
+    updateUserInfo();
+    window.addEventListener("storage", updateUserInfo);
+
+    return () => {
+      window.removeEventListener("storage", updateUserInfo);
+    };
   }, [navigate]);
 
   return (
