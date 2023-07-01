@@ -1,12 +1,12 @@
 const express = require("express");
 const dotenv = require("dotenv");
-const { chats } = require("./data/data");
 const connectDB = require("./config/db");
 const userRoutes = require("./routes/userRoutes");
 const chatRoutes = require("./routes/chatRoutes");
 const messageRoutes = require("./routes/messageRoutes");
 const notificationRoutes = require("./routes/notificationRoutes");
 const Notification = require("./models/notificationModel");
+const avatarRoutes = require("./routes/avatarRoutes");
 
 const { notFound, errorHandler } = require("./middleware/errorMiddleware");
 
@@ -24,6 +24,7 @@ app.use("/api/user", userRoutes);
 app.use("/api/chat", chatRoutes);
 app.use("/api/message", messageRoutes);
 app.use("/api/notification", notificationRoutes);
+app.use("/api/avatar", avatarRoutes);
 
 app.use(notFound);
 app.use(errorHandler);
