@@ -7,6 +7,7 @@ const messageRoutes = require("./routes/messageRoutes");
 const notificationRoutes = require("./routes/notificationRoutes");
 const Notification = require("./models/notificationModel");
 const avatarRoutes = require("./routes/avatarRoutes");
+const backgroundRoutes = require("./routes/backgroundRoutes");
 
 const { notFound, errorHandler } = require("./middleware/errorMiddleware");
 
@@ -25,6 +26,7 @@ app.use("/api/chat", chatRoutes);
 app.use("/api/message", messageRoutes);
 app.use("/api/notification", notificationRoutes);
 app.use("/api/avatar", avatarRoutes);
+app.use("/api/background", backgroundRoutes);
 
 app.use(notFound);
 app.use(errorHandler);

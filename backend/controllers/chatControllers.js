@@ -182,6 +182,28 @@ const removeFromGroup = asyncHandler(async (req, res) => {
   }
 });
 
+const updateChatBackground = asyncHandler(async (req, res) => {
+  const { chatId, pic } = req.body;
+
+  const chat = await Chat.findById(chatId);
+
+  if (!chat) {
+    res.status(404);
+    throw new Error("Chat not found");
+  }
+
+  chat.pic = `/api/background/${pic}`;
+
+  const updatedChat = await chat.save();
+
+  if (!updatedChat) {
+    res.status(500);
+    throw new Error("Failed to update background");
+  } else {
+    res.json(updatedChat);
+  }
+});
+
 module.exports = {
   accessChat,
   fetchChats,
@@ -189,4 +211,5 @@ module.exports = {
   renameGroup,
   addToGroup,
   removeFromGroup,
+  updateChatBackground,
 };

@@ -37,15 +37,6 @@ const AvatarsModal = ({ user, setUser, isOpen, onClose }) => {
       };
 
       try {
-        await axios
-          .put("/api/user/profile", { pic: avatar }, config)
-          .then((response) => {
-            console.log(response);
-          })
-          .catch((error) => {
-            console.error(error);
-          });
-
         const { data } = await axios.put(
           "/api/user/profile",
           { pic: avatar },

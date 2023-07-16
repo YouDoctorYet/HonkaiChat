@@ -7,6 +7,7 @@ import { AddIcon } from "@chakra-ui/icons";
 import ChatLoading from "./ChatLoading";
 import { getSender } from "../config/ChatLogics";
 import GroupChatModal from "./miscellaneous/GroupChatModal";
+import background from "../../src/background.jpg";
 
 const MyChats = ({ fetchAgain }) => {
   const { selectedChat, setSelectedChat, user, chats, setChats } = ChatState();
@@ -81,6 +82,10 @@ const MyChats = ({ fetchAgain }) => {
         h="100%"
         borderRadius="lg"
         overflowY="hidden"
+        backgroundImage={background}
+        backgroundSize="cover"
+        backgroundRepeat="no-repeat"
+        backgroundPosition="center"
       >
         {chats ? (
           <Stack overflowY="scroll">

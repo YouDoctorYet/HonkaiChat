@@ -3,12 +3,24 @@ import { ChatState } from "../context/ChatProvider";
 import { FormControl } from "@chakra-ui/form-control";
 import { Input } from "@chakra-ui/input";
 import { Box, Text } from "@chakra-ui/layout";
-import { IconButton, Spinner, useToast } from "@chakra-ui/react";
+import {
+  IconButton,
+  Spinner,
+  useToast,
+  Button,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
+  MenuGroup,
+  Flex,
+} from "@chakra-ui/react";
 import { getSender, getSenderFull } from "../config/ChatLogics";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { ArrowBackIcon } from "@chakra-ui/icons";
+import { ArrowBackIcon, SettingsIcon, ChevronDownIcon } from "@chakra-ui/icons";
 import ProfileModal from "./miscellaneous/ProfileModal";
+import BackgroundModal from "./miscellaneous/BackgroundModal";
 import UpdateGroupChatModal from "./miscellaneous/UpdateGroupChatModal";
 import "./styles.css";
 import ScrollableChat from "./ScrollableChat";
@@ -31,6 +43,24 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   const [typing, setTyping] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
   const toast = useToast();
+  const [isBackgroundModalOpen, setBackgroundModalOpen] = useState(false);
+  const [isUpdateGroupModalOpen, setUpdateGroupModalOpen] = useState(false);
+
+  const openBackgroundModal = () => {
+    setBackgroundModalOpen(true);
+  };
+
+  const closeBackgroundModal = () => {
+    setBackgroundModalOpen(false);
+  };
+
+  const openUpdateGroupModal = () => {
+    setUpdateGroupModalOpen(true);
+  };
+
+  const closeUpdateGroupModal = () => {
+    setUpdateGroupModalOpen(false);
+  };
 
   const fetchNotifications = async () => {
     try {
@@ -56,6 +86,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
 
   const fetchMessages = async () => {
     if (!selectedChat) return;
+    console.log("Fetching messages for chat:", selectedChat._id);
     try {
       const config = {
         headers: {
@@ -122,6 +153,10 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   useEffect(() => {
     fetchMessages();
     selectedChatCompare = selectedChat;
+    console.log(
+      "Selected chat in useEffect:",
+      selectedChat && selectedChat._id
+    );
   }, [selectedChat]);
 
   useEffect(() => {
@@ -180,7 +215,6 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
           {
             sender: user._id,
             chat: selectedChat._id,
-            // Get the recipient from the selectedChat
             recipient: selectedChat.users.find((u) => u._id !== user._id)._id,
           },
           config
@@ -223,7 +257,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     <>
       {selectedChat ? (
         <>
-          <Text
+          <Box
             fontSize={{ base: "28px", md: "30px" }}
             pb={3}
             px={2}
@@ -239,21 +273,54 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
               onClick={() => setSelectedChat("")}
             />
             {!selectedChat.isGroupChat ? (
-              <>
-                {getSender(user, selectedChat.users)}
-                <ProfileModal user={getSenderFull(user, selectedChat.users)} />
-              </>
+              <>{getSender(user, selectedChat.users)}</>
             ) : (
-              <>
-                {selectedChat.chatName.toUpperCase()}
-                <UpdateGroupChatModal
-                  fetchAgain={fetchAgain}
-                  setFetchAgain={setFetchAgain}
-                  fetchMessages={fetchMessages}
-                />
-              </>
+              <>{selectedChat.chatName.toUpperCase()}</>
             )}
-          </Text>
+            <Menu>
+              <MenuButton as={Button}>
+                <Flex align="center">
+                  <SettingsIcon />
+                </Flex>
+              </MenuButton>
+              <MenuList
+                style={{
+                  fontSize: "16px",
+                  fontFamily: "Arial",
+                  width: "auto",
+                }}
+              >
+                {!selectedChat.isGroupChat ? (
+                  <ProfileModal user={getSenderFull(user, selectedChat.users)}>
+                    <MenuItem>View Profile</MenuItem>
+                  </ProfileModal>
+                ) : (
+                  <UpdateGroupChatModal
+                    fetchAgain={fetchAgain}
+                    setFetchAgain={setFetchAgain}
+                    fetchMessages={fetchMessages}
+                    isOpen={isUpdateGroupModalOpen}
+                    onClose={closeUpdateGroupModal}
+                  />
+                )}
+                {selectedChat.isGroupChat && (
+                  <MenuItem onClick={openUpdateGroupModal}>
+                    Group Profile
+                  </MenuItem>
+                )}
+                <MenuItem onClick={openBackgroundModal}>
+                  Change Background
+                </MenuItem>
+              </MenuList>
+            </Menu>
+            <BackgroundModal
+              user={user}
+              chat={selectedChat}
+              setChat={setSelectedChat}
+              isOpen={isBackgroundModalOpen}
+              onClose={closeBackgroundModal}
+            />
+          </Box>
           <Box
             display="flex"
             flexDir="column"
@@ -264,7 +331,12 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
             h="100%"
             borderRadius="lg"
             overflowY="hidden"
+            backgroundImage={`url(${selectedChat.pic})`}
+            backgroundSize="cover"
+            backgroundRepeat="no-repeat"
+            backgroundPosition="center"
           >
+            {console.log("Selected chat in render:", selectedChat._id)}
             {loading ? (
               <Spinner
                 size="xl"

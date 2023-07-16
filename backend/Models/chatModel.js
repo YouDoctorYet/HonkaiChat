@@ -18,6 +18,10 @@ const chatModel = mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
     },
+    pic: {
+      type: String,
+      default: "/api/background/1315964.png",
+    },
   },
   {
     timestamp: true,
