@@ -70,9 +70,9 @@ const BackgroundModal = ({ user, chat, setChat, isOpen, onClose }) => {
   return (
     <Modal size="lg" onClose={onClose} isOpen={isOpen} isCentered>
       <ModalOverlay />
-      <ModalContent maxHeight="750px">
+      <ModalContent bg="gray.100" borderRadius="lg" maxHeight="750px">
         <ModalHeader>Select New Background</ModalHeader>
-        <ModalCloseButton />
+        <ModalCloseButton color="red.500" />
         <ScrollableFeed>
           <ModalBody maxHeight="600px">
             <Grid templateColumns="repeat(1, 1fr)" gap={5}>
@@ -81,10 +81,15 @@ const BackgroundModal = ({ user, chat, setChat, isOpen, onClose }) => {
                   key={index}
                   onClick={() => selectBackground(background)}
                   cursor="pointer"
+                  role="group"
+                  p={2}
+                  borderRadius="md"
+                  _hover={{ bg: "gray.300" }}
+                  mb={index === backgrounds.length - 1 ? 5 : 0}
                 >
                   <Image
                     src={`/api/background/${background}`}
-                    borderRadius="md"
+                    borderRadius="xl"
                   />
                 </Box>
               ))}

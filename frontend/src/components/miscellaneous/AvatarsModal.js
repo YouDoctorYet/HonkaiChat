@@ -56,19 +56,21 @@ const AvatarsModal = ({ user, setUser, isOpen, onClose }) => {
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} size="xl">
+    <Modal isOpen={isOpen} onClose={onClose} size="xl" isCentered>
       <ModalOverlay />
       <ModalContent maxHeight="750px">
         <ModalHeader>Select Avatar</ModalHeader>
-        <ModalCloseButton />
+        <ModalCloseButton color="red.500" />
         <ScrollableFeed>
-          <ModalBody maxHeight="600px">
+          <ModalBody maxHeight="700px">
             <Grid templateColumns="repeat(5, 1fr)" gap={5}>
               {avatars.map((avatar, index) => (
                 <Box
                   key={index}
                   onClick={() => selectAvatar(avatar)}
                   cursor="pointer"
+                  _hover={{ bg: "gray.300" }}
+                  borderRadius="50%"
                 >
                   <Image src={`/api/avatar/${avatar}`} borderRadius="50%" />
                 </Box>
