@@ -75,7 +75,7 @@ const BackgroundModal = ({ user, chat, setChat, isOpen, onClose }) => {
         <ModalCloseButton />
         <ScrollableFeed>
           <ModalBody maxHeight="600px">
-            <Grid templateColumns="repeat(5, 1fr)" gap={5}>
+            <Grid templateColumns="repeat(1, 1fr)" gap={5}>
               {backgrounds.map((background, index) => (
                 <Box
                   key={index}
@@ -84,7 +84,7 @@ const BackgroundModal = ({ user, chat, setChat, isOpen, onClose }) => {
                 >
                   <Image
                     src={`/api/background/${background}`}
-                    borderRadius="50%"
+                    borderRadius="md"
                   />
                 </Box>
               ))}
