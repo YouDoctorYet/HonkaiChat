@@ -9,7 +9,7 @@ Contents
 
  * [Why?](#why)
  * [Features](#features)
- * [Next Steps](#next_steps)
+ * [Next](#next)
  * [Dependencies](#dependencies)
 
 ### Why?
@@ -43,7 +43,7 @@ User authentication in this application is primarily handled through JSON Web To
 ![log in demo photo](img/login.png)
 
 
-### Next Steps
+### Next
 ---
 
 Unfortunately, the tech job market has been tough, especially for recent grads. Between all the job apps, interviews, and leetcode grinds, I haven't had time to finish implementing the chat stickers features. 
