@@ -2,14 +2,14 @@
 
 HonkaiChat lets Honkai Star Rail (HSR) fans easily chat with one another, choose their favorite HSR art background, profile avatar, and send cute Pom-pom stickers!
 
-![HonkaiChat Chat Screen Demo Photo](img/notification)
+![HonkaiChat Chat Screen Demo Photo](img/notification.png)
 
 Contents
 ========
 
  * [Why?](#why)
  * [Features](#features)
- * [Next Steps](#nextsteps)
+ * [Next Steps](#next_steps)
  * [Dependencies](#dependencies)
 
 ### Why?
@@ -24,23 +24,23 @@ And so I made a messaging app that allows players to send the in-game Pom-pom st
 
 Basic messaging app features (one-to-one chat, group chat, notifications, etc.) are all included.
 
-![create group chat demo photo](img/create-group)
+![create group chat demo photo](img/create-group.png)
 
-![edit group chat demo photo](img/edit-group)
+![edit group chat demo photo](img/edit-group.png)
 
-![user search demo photo](img/search-user)
+![user search demo photo](img/search-user.png)
 
 
 The unique features of this messaging app are the HSR-themed chat backgrounds and profile avatars.
 
-![choose avatar demo photo](img/choose-avatar)
+![choose avatar demo photo](img/choose-avatar.png)
 
-![choose background demo photo](img/choose-background)
+![choose background demo photo](img/choose-background.png)
 
 
 User authentication in this application is primarily handled through JSON Web Tokens (JWT). Upon successful login, the server generates a JWT that encapsulates the user's identifier, and this token is sent back to the client. The client uses this token in subsequent requests to authenticate itself, and the server validates the JWT from incoming requests to authenticate the user.
 
-![log in demo photo](img/login)
+![log in demo photo](img/login.png)
 
 
 ### Next Steps
