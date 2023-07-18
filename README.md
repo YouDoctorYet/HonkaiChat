@@ -60,7 +60,7 @@ The next steps I have planned are largely:
 
 If you want to try this app for yourself, you would need to install a few dependencies first. 
 
-First, visit ![official Node.js website's downloads page](https://nodejs.org/en/download) and download the LTS version.
+First, visit https://nodejs.org/en/download and download the LTS version.
 
 Then, install these dependencies: 
 ```bash
